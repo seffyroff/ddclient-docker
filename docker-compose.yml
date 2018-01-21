@@ -1,0 +1,50 @@
+version: '3.4'
+
+secrets:
+      ddconf-h3u:
+        external:
+          name: ddconf-h3u
+      ddconf-hackops:
+        external:
+          name: ddconf-hackops
+        
+services:
+  ddclient-h3u:
+    image: linuxserver/ddclient
+    restart: always
+    secrets:
+      - source: ddconf-h3u
+        target: /config/ddclient.conf
+        uid: '1000'
+        gid: '1000'
+        mode: 0660
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+    environment:
+     - CONFIGPATH=/config/
+     - TZ=America/Vancouver
+     - PUID=1000
+     - PGID=1000
+    deploy:
+      labels:
+      - traefik.enabled=false
+
+  ddclient-hackops:
+    image: linuxserver/ddclient
+    restart: always
+    secrets:
+      - source: ddconf-hackops
+        target: /config/ddclient.conf
+        uid: '1000'
+        gid: '1000'
+        mode: 0660
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+    environment:
+     - CONFIGPATH=/config/
+     - TZ=America/Vancouver
+     - PUID=1000
+     - PGID=1000
+    deploy:
+      labels:
+      - traefik.enabled=false
